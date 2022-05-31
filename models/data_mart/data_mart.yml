@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: fact_cohort_analysis
+    description: This table has basic information about orders, as well as some derived facts based on payments.
+
+    columns:
+      - name: customer_id
+        description: This is a unique identifier for a customer
+        tests:
+          - unique
+          - not_null
+
+      - name: first_order_date
+        tests:
+          - not_null
+ 
+      - name: last_order_date
+        tests:
+          - not_null
+           
+      - name: total_orders
+        tests:
+          - not_null 
+
+      - name: total_revenue
+        tests:
+          - not_null
+
+      - name: average_days_between_orders
+        tests:
+          - not_null
+       
+  - name: fact_order_payments
+    description: This table has basic information about orders and payments.
+
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+        description: This is a unique identifier for an order
+
+      - name: payment_id
+        tests: 
+          - not_null
+          - relationships:
+              to: ref('stg_payments')
+              field: payment_id
+
+      - name: customer_id
+        tests: 
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: customer_id
+ 
